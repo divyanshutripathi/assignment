@@ -4,31 +4,44 @@ const minTickCost = async () => {
     [4000, 6000, 3500],
     [2000, 4000, 2500],
   ];
+
   const minRow = await minRowValue(arr);
   const rowSubArr = await subtractRow(minRow, arr);
   const minCol = await minColValue(rowSubArr);
   const colSubArr = await subtractCol(minCol, rowSubArr);
-  const minCost = await calculateMinCost(colSubArr, arr);
+  const { minCost, places } = await calculateMinCost(colSubArr, arr);
   console.log("min Cost is : ", minCost);
+  console.log("places : ", places);
 };
 
 const calculateMinCost = async (arr, originalArray) => {
+  const placesArr = [
+    ["Jaipur", "Pune", "Banglore"],
+    ["Delhi", "Keral", "Mumbai"],
+  ];
   let min = 9999999;
   let sum = 0;
+  let p = [];
   for (i = 0; i < 3; i++) {
     for (j = 0; j < 3; j++) {
       if (arr[0][i] === 0) {
         min = originalArray[0][i];
+        p[
+          i
+        ] = `${placesArr[0][0]} to ${placesArr[1][i]} - ${originalArray[0][i]}`;
       }
       if (arr[j][i] === 0) {
         if (originalArray[j][i] < min) {
           min = originalArray[j][i];
+          p[
+            i
+          ] = `${placesArr[0][j]} to ${placesArr[1][i]} - ${originalArray[0][i]}`;
         }
       }
     }
     sum = sum + min;
   }
-  return sum;
+  return { minCost: sum, places: p };
 };
 
 const minRowValue = async (arr) => {
